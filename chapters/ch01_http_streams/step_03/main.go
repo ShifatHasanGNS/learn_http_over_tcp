@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes"
+	"bufio"
 	"fmt"
 	"log"
 	"os"
@@ -16,20 +16,12 @@ func main() {
 	}
 	defer f.Close()
 
-	str := ""
-	for {
-		data := make([]byte, 8)
-		_, err := f.Read(data)
-		if err != nil {
-			break
-		}
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 
-		if i := bytes.IndexByte(data, '\n'); i != -1 { // got a newline
-			str += string(data[:i])
-			fmt.Println(str)
-			str = ""
-			data = data[i+1:] // remaining data after newline
-		}
-		str += string(data)
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 }

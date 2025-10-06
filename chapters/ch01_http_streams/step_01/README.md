@@ -1,3 +1,3 @@
 # Task
 
-- Check if all are set by printing something: "Hello, World!"
+- Read and Print from `messages.txt`, 8 bytes at a time

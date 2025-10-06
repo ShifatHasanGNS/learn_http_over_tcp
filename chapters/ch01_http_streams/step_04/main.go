@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes"
+	"bufio"
 	"fmt"
 	"io"
 	"log"
@@ -17,21 +17,13 @@ func getLinesChannel(f io.ReadCloser) <-chan string {
 		defer f.Close()
 		defer close(out)
 
-		str := ""
-		for {
-			data := make([]byte, 8)
-			_, err := f.Read(data)
-			if err != nil {
-				break
-			}
+		scanner := bufio.NewScanner(f)
+		for scanner.Scan() {
+			out <- scanner.Text()
+		}
 
-			if i := bytes.IndexByte(data, '\n'); i != -1 { // got a newline
-				str += string(data[:i])
-				out <- str
-				str = ""
-				data = data[i+1:] // remaining data after newline
-			}
-			str += string(data)
+		if err := scanner.Err(); err != nil {
+			log.Println("Scanner error:", err)
 		}
 	}()
 

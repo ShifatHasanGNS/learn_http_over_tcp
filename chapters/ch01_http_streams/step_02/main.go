@@ -1,8 +1,8 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"io"
 	"log"
 	"os"
 )
@@ -16,15 +16,20 @@ func main() {
 	}
 	defer f.Close()
 
-	buf := make([]byte, 8)
+	str := ""
 	for {
-		n, err := f.Read(buf)
-		if err != nil && err != io.EOF {
-			log.Fatal(err)
-		}
-		if n == 0 {
+		data := make([]byte, 8)
+		_, err := f.Read(data)
+		if err != nil {
 			break
 		}
-		fmt.Printf("Read %d bytes: %q\n", n, buf[:n])
+
+		if i := bytes.IndexByte(data, '\n'); i != -1 { // got a newline
+			str += string(data[:i])
+			fmt.Println(str)
+			str = ""
+			data = data[i+1:] // remaining data after newline
+		}
+		str += string(data)
 	}
 }

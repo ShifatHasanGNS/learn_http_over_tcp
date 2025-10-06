@@ -12,7 +12,10 @@
 For:
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '{"flavor":"dark mode"}' http://localhost:42069/coffee
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -d '{"flavor":"dark mode"}' \
+     http://localhost:42069/coffee
 ```
 
 Output:

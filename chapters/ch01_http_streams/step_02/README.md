@@ -1,3 +1,3 @@
 # Task
 
-- Read and Print from `messages.txt`, 8 bytes at a time
+- Read from a file 8 bytes at a time, and print line by line
